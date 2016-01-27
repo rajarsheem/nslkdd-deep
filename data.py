@@ -23,3 +23,15 @@ def testdata():
 
 # data = np.genfromtxt('kddtrain_2class_normalized.csv',delimiter=',',skip_header=True)
 # testdata()
+
+r = []
+for i in range(1,6):
+    r.append(np.arange(len(targets))[targets == i])
+def get_batch_indices(class_size):
+    n,k = [],[]
+    for i in r:
+        n.append(len(i))
+    for j,i in enumerate(n):
+        temp = np.random.choice(i,class_size,replace=False)
+        k.extend(r[j][temp])
+    return k
