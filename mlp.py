@@ -44,14 +44,15 @@ biases = {
 pred = multilayer_perceptron(x, weights, biases)
 
 # Define loss and optimizer
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y)) +
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # Initializing the variables
 init = tf.initialize_all_variables()
 
 
-with tf.Session() as sess:
+with tf.Graph().as_default():
+    sess=tf.Session()
     sess.run(init)
     saver = tf.train.Saver()
     for epoch in range(training_epochs):
@@ -64,7 +65,6 @@ with tf.Session() as sess:
         if epoch % display_step == 0:
             print("Epoch:", '%04d' % (epoch + 1))
     saver.save(sess, 'model.ckpt')
-    print("Optimization Finished!")
     # Test model
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     a, b = d.testdata()
