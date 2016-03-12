@@ -4,7 +4,8 @@ import numpy as np
 
 n = 40
 c = 5
-data = np.genfromtxt('kddtrain_2class_normalized.csv', delimiter=',', skip_header=True)
+data = np.genfromtxt(
+    'kddtrain_2class_normalized.csv', delimiter=',', skip_header=True)
 x = tf.placeholder(tf.float32, [None, n])
 W = tf.Variable(tf.zeros([n, c]))
 b = tf.Variable(tf.zeros([c]))
