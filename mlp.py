@@ -5,16 +5,16 @@ import data as d
 # data = np.genfromtxt('kddtrain_2class_normalized.csv', delimiter=',', skip_header=True)
 data = np.load('new_input.npz')['train']
 # Parameters
-learning_rate = 0.001
-training_epochs = 8
+learning_rate = 0.007
+training_epochs = 2
 batch_size = 1000
 display_step = 1
 
 # Network Parameters
-n_hidden_1 = 30  # 1st layer num features
-n_hidden_2 = 30  # 2nd layer num features
-n_input = 2000  # MNIST data input (img shape: 28*28)
-n_classes = 5  # MNIST total classes (0-9 digits)
+n_hidden_1 = 200
+n_hidden_2 = 500
+n_input = 2000
+n_classes = 5
 
 # tf Graph input
 x = tf.placeholder("float", [None, n_input])
