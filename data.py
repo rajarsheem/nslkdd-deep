@@ -40,7 +40,7 @@ def testdata():
     return data[:, :-1], one_hot(data[:, -1])
 
 # data = np.genfromtxt('kddtrain_2class_normalized.csv',delimiter=',',skip_header=True)
-data = np.load('new_input.npz')['train']
-train_x, train_y = train_batch_data(data,40)
-print(train_x.shape, train_y.shape)
+# data = np.load('new_input.npz')['train']
+# train_x, train_y = train_batch_data(data,40)
+# print(train_x.shape, train_y.shape)
 # testdata()
