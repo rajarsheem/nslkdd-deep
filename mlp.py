@@ -2,8 +2,8 @@ import tensorflow as tf
 import numpy as np
 import data as d
 
-data = np.genfromtxt('kddtrain_2class_normalized.csv', delimiter=',', skip_header=True)
-
+# data = np.genfromtxt('kddtrain_2class_normalized.csv', delimiter=',', skip_header=True)
+data = np.load('new_input.npz')['train']
 # Parameters
 learning_rate = 0.001
 training_epochs = 8
@@ -13,7 +13,7 @@ display_step = 1
 # Network Parameters
 n_hidden_1 = 30  # 1st layer num features
 n_hidden_2 = 30  # 2nd layer num features
-n_input = 40  # MNIST data input (img shape: 28*28)
+n_input = 2000  # MNIST data input (img shape: 28*28)
 n_classes = 5  # MNIST total classes (0-9 digits)
 
 # tf Graph input
@@ -44,23 +44,19 @@ biases = {
 pred = multilayer_perceptron(x, weights, biases)
 
 # Define loss and optimizer
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))  # Softmax loss
-optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)  # Adam Optimizer
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
+optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # Initializing the variables
 init = tf.initialize_all_variables()
 
-# Launch the graph
+
 with tf.Session() as sess:
     sess.run(init)
     saver = tf.train.Saver()
-    # Training cycle
     for epoch in range(training_epochs):
-        # total_batch = int(mnist.train.num_examples / batch_size)
-        # Loop over all batches
         for i in range(3000):
             batch_xs, batch_ys = d.train_batch_data(data, 40)
-            # Fit training using batch data
             sess.run(optimizer, feed_dict={x: batch_xs, y: batch_ys})
             if i % 250 == 0:
                 print('batch', i, end=' ', flush=True)
