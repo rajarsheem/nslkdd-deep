@@ -2,9 +2,10 @@ import numpy as np
 from collections import Counter
 from sklearn.preprocessing import LabelBinarizer
 
+
 def one_hot(yy):
-    lb=LabelBinarizer()
-    yy=lb.fit(yy).transform(yy)
+    lb = LabelBinarizer()
+    yy = lb.fit(yy).transform(yy)
     return yy
     # if labels == None:
     #     fset = set((yy))
