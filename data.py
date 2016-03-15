@@ -7,13 +7,6 @@ def one_hot(yy):
     lb = LabelBinarizer()
     yy = lb.fit(yy).transform(yy)
     return yy
-    # if labels == None:
-    #     fset = set((yy))
-    # else:
-    #     fset = set(labels)
-    # onehotmap = {x: list(map(int, list(bin(2 ** y)[2:].zfill(len(fset))))) for y, x in enumerate(fset)}
-    # lst = [onehotmap[x] for x in yy]
-    # return lst
 
 
 def get_batch_indices(r, class_size):
@@ -41,7 +34,7 @@ def testdata():
     return data[:, :-1], one_hot(data[:, -1])
 
 # data = np.genfromtxt('kddtrain_2class_normalized.csv',delimiter=',',skip_header=True)
-data = np.load('new_input.npz')['train']
-train_x, train_y = train_batch_data(data,40)
-print(train_x.shape, train_y.shape)
+# data = np.load('new_input.npz')['train']
+# train_x, train_y = train_batch_data(data,40)
+# print(train_x.shape, train_y.shape)
 # testdata()
