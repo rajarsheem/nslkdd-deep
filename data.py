@@ -6,13 +6,6 @@ def one_hot(yy):
     lb=LabelBinarizer()
     yy=lb.fit(yy).transform(yy)
     return yy
-    # if labels == None:
-    #     fset = set((yy))
-    # else:
-    #     fset = set(labels)
-    # onehotmap = {x: list(map(int, list(bin(2 ** y)[2:].zfill(len(fset))))) for y, x in enumerate(fset)}
-    # lst = [onehotmap[x] for x in yy]
-    # return lst
 
 
 def get_batch_indices(r, class_size):
