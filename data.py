@@ -30,7 +30,7 @@ def train_batch_data(data, set_size):
 
 def testdata():
     # data = np.genfromtxt('KDDTest+_normalized.csv', delimiter=',', skip_header=True)
-    data = np.load('new_input.npz')['test']
+    data = np.load('out/new_input.npz')['test']
     return data[:, :-1], one_hot(data[:, -1])
 
 # data = np.genfromtxt('kddtrain_2class_normalized.csv',delimiter=',',skip_header=True)

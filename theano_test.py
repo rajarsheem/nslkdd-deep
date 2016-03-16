@@ -5,7 +5,7 @@ import numpy as np
 import data as d
 from sklearn.metrics import accuracy_score, precision_score, confusion_matrix
 
-loaded = np.load('model.npz')['params']
+loaded = np.load('out/model.npz')['params']
 
 W1 = theano.shared(loaded[0])
 b1 = theano.shared(loaded[1])

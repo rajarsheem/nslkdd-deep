@@ -16,7 +16,7 @@ from collections import Counter
 np.random.seed(0)
 # train_X, train_y = sklearn.datasets.make_moons(5000, noise=0.20)
 # train_y_onehot = np.eye(2)[train_y]
-train_dataset = new_input1 = np.load('new_input.npz')['test']
+train_dataset = new_input1 = np.load('out/new_input.npz')['test']
 
 
 num_examples = 40
