@@ -7,12 +7,12 @@ from sklearn.metrics import accuracy_score, precision_score, confusion_matrix
 
 loaded = np.load('out/model.npz')['params']
 
-W1 = theano.shared(loaded[0])
-b1 = theano.shared(loaded[1])
-W2 = theano.shared(loaded[2])
-b2 = theano.shared(loaded[3])
-W3 = theano.shared(loaded[4])
-b3 = theano.shared(loaded[5])
+W1 = theano.shared(loaded[0][0])
+b1 = theano.shared(loaded[0][1])
+W2 = theano.shared(loaded[0][2])
+b2 = theano.shared(loaded[1][0])
+W3 = theano.shared(loaded[1][1])
+b3 = theano.shared(loaded[1][2])
 
 X = theano.shared(np.array(np.random.randn(200,2000), config.floatX))
 y = theano.shared(np.array(np.random.randn(200,5), config.floatX))
