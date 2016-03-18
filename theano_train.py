@@ -23,6 +23,7 @@ nn_input_dim = 1000
 nn_output_dim = 5
 nn_hdim1 = 1000
 nn_hdim2 = 500
+nn_hdim3 = 100
 batch_per_epoch = 3000
 num_passes = 2
 
@@ -80,9 +81,9 @@ params = [w_stack, b_stack]
 # z3 = a2.dot(W3) + b3
 # y_hat = T.nnet.softmax(z3)
 
-add_layer('relu', 500)
-add_layer('relu', 50)
-# add_layer('relu',500)
+add_layer('relu', nn_hdim1)
+add_layer('relu', nn_hdim2)
+add_layer('relu', nn_hdim3)
 add_layer('softmax', nn_output_dim)
 
 loss_reg = 1. / num_examples * reg_lambda / 2 * (
@@ -90,12 +91,14 @@ T.sum(T.sqr(w_stack[-3])) + T.sum(T.sqr(w_stack[-2])) + T.sum(T.sqr(w_stack[-1])
 loss = ((T.nnet.categorical_crossentropy(layer_stack[-1], y)*c_w).mean()) + loss_reg
 prediction = T.argmax(layer_stack[-1], axis=1)
 
-dW3 = T.grad(loss, w_stack[-1])
-db3 = T.grad(loss, b_stack[-1])
-dW2 = T.grad(loss, w_stack[-2])
-db2 = T.grad(loss, b_stack[-2])
-dW1 = T.grad(loss, w_stack[-3])
-db1 = T.grad(loss, b_stack[-3])
+dW4 = T.grad(loss, w_stack[-1])
+db4 = T.grad(loss, b_stack[-1])
+dW3 = T.grad(loss, w_stack[-2])
+db3 = T.grad(loss, b_stack[-2])
+dW2 = T.grad(loss, w_stack[-3])
+db2 = T.grad(loss, b_stack[-3])
+dW1 = T.grad(loss, w_stack[-4])
+db1 = T.grad(loss, b_stack[-4])
 
 forward_prop = theano.function([], layer_stack[-1])
 # debug = theano.function([], (T.nnet.categorical_crossentropy(layer_stack[-1], y)))
@@ -104,21 +107,26 @@ predict = theano.function([], prediction)
 
 gradient_step = theano.function(
     [],
-    updates=((w_stack[-1], w_stack[-1] - epsilon * dW3),
-             (w_stack[-2], w_stack[-2] - epsilon * dW2),
-             (w_stack[-3], w_stack[-3] - epsilon * dW1),
-             (b_stack[-1], b_stack[-1] - epsilon * db3),
-             (b_stack[-2], b_stack[-2] - epsilon * db2),
-             (b_stack[-3], b_stack[-3] - epsilon * db1)))
+    updates=((w_stack[-1], w_stack[-1] - epsilon * dW4),
+             (w_stack[-2], w_stack[-2] - epsilon * dW3),
+             (w_stack[-3], w_stack[-3] - epsilon * dW2),
+             (w_stack[-4], w_stack[-4] - epsilon * dW1),
+             (b_stack[-1], b_stack[-1] - epsilon * db4),
+             (b_stack[-2], b_stack[-2] - epsilon * db3),
+             (b_stack[-3], b_stack[-3] - epsilon * db2),
+             (b_stack[-4], b_stack[-4] - epsilon * db1)))
 
 
 def build_model(num_passes=5, print_loss=False):
     np.random.seed(0)
-    w_stack[-3].set_value((np.random.randn(nn_input_dim, nn_hdim1) / np.sqrt(nn_input_dim)).astype('float32'))
-    b_stack[-3].set_value(np.zeros(nn_hdim1).astype('float32'))
-    w_stack[-2].set_value((np.random.randn(nn_hdim1, nn_hdim2) / np.sqrt(nn_hdim1)).astype('float32'))
-    b_stack[-2].set_value(np.zeros(nn_hdim2).astype('float32'))
-    w_stack[-1].set_value((np.random.randn(nn_hdim2, nn_output_dim) / np.sqrt(nn_hdim2)).astype('float32'))
+
+    w_stack[-4].set_value((np.random.randn(nn_input_dim, nn_hdim1) / np.sqrt(nn_input_dim)).astype('float32'))
+    b_stack[-4].set_value(np.zeros(nn_hdim1).astype('float32'))
+    w_stack[-3].set_value((np.random.randn(nn_hdim1, nn_hdim2) / np.sqrt(nn_hdim1)).astype('float32'))
+    b_stack[-3].set_value(np.zeros(nn_hdim2).astype('float32'))
+    w_stack[-2].set_value((np.random.randn(nn_hdim2, nn_hdim3) / np.sqrt(nn_hdim2)).astype('float32'))
+    b_stack[-2].set_value(np.zeros(nn_hdim3).astype('float32'))
+    w_stack[-1].set_value((np.random.randn(nn_hdim3, nn_output_dim) / np.sqrt(nn_hdim2)).astype('float32'))
     b_stack[-1].set_value(np.zeros(nn_output_dim).astype('float32'))
 
     for i in range(0, num_passes):
