@@ -82,6 +82,7 @@ params = [w_stack, b_stack]
 
 add_layer('relu', 500)
 add_layer('relu', 50)
+# add_layer('relu',500)
 add_layer('softmax', nn_output_dim)
 
 loss_reg = 1. / num_examples * reg_lambda / 2 * (
