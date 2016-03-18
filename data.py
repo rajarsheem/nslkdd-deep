@@ -5,6 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 train_dataset = new_input1 = np.load('out/new_input.npz')['train']
 
+
 def one_hot(yy):
     lb = LabelBinarizer()
     yy = lb.fit(yy).transform(yy)
@@ -12,17 +13,23 @@ def one_hot(yy):
 
 
 def compute_class_weight(y):
-    # y = y.astype(np.int32)
+    y = y.astype(np.int32)
     # print(np.bincount(y))
-    # w = (len(y) / (5 * np.bincount(y)) + 1)
-    # # print(w)
-    # w = MinMaxScaler(feature_range=(1, 20)).fit_transform(w.reshape(-1,1)).flatten()
-    # # print(w)
-    w = np.array([1,1,1.2,2,3],dtype=np.float32)
-    r = np.array([w[i] for i in y])
+    # w = (len(y) / np.bincount(y))) + 1)
+    # print(w)
+    # w = MinMaxScaler(feature_range=(1, 2)).fit_transform(w.reshape(-1,1)).flatten()
+    # print(w)
+    w = np.array([1,1,1,1,1],dtype=np.float32)
+    r = np.array([w[i] for i in y]) + 1
     return r
 
 c_w = compute_class_weight(train_dataset[:,-1]-1)
+
+
+def recompute():
+    global c_w
+    c_w = compute_class_weight(train_dataset[:, -1]-1)
+
 
 def get_batch_indices(r, class_size):
     n, k = [], []
@@ -35,17 +42,21 @@ def get_batch_indices(r, class_size):
 
 
 def train_batch_data(set_size):
-    targets = train_dataset[:, -1]
-    r = []
-    for i in range(1, 6):
-        r.append(np.arange(len(targets))[targets == i])
+    train_batch_data.targets = train_dataset[:, -1]
+    train_batch_data.compute = True
+    train_batch_data.r = []
+    if train_batch_data.compute:
+        for i in range(1, 6):
+            train_batch_data.r.append(
+                np.arange(len(train_batch_data.targets))
+                [train_batch_data.targets == i]
+            )
     indices = get_batch_indices(r, set_size)
     sample = train_dataset[indices]
     return sample[:, :-1], one_hot(sample[:, -1]), c_w[indices]
 
 
 def fulldata(x):
-    # data = np.genfromtxt('KDDTest+_normalized.csv', delimiter=',', skip_header=True)
     data = np.load('out/new_input.npz')[x]
     return data[:, :-1], one_hot(data[:, -1])
 
