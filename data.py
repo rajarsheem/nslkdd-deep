@@ -23,7 +23,7 @@ def compute_class_weight(y):
     r = np.array([w[i] for i in y]) + 1
     return r
 
-c_w = compute_class_weight(train_dataset[:,-1]-1)
+c_w = compute_class_weight(train_dataset[:, -1]-1)
 
 
 def recompute():
@@ -51,7 +51,7 @@ def train_batch_data(set_size):
                 np.arange(len(train_batch_data.targets))
                 [train_batch_data.targets == i]
             )
-    indices = get_batch_indices(r, set_size)
+    indices = get_batch_indices(train_batch_data.r, set_size)
     sample = train_dataset[indices]
     return sample[:, :-1], one_hot(sample[:, -1]), c_w[indices]
 

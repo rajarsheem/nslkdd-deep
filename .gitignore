@@ -7,3 +7,4 @@ kddtrain_2class_normalized.csv
 kddtrain_normalized_alpha.csv
 ikddtrain_normalized_alpha.csv.zip
 .ipynb_checkpoints/*
+data.pyc
