@@ -1,4 +1,4 @@
-new_input.npz
+out/new_input.npz
 preds.npz
 KDDTest+_normalized.csv
 kddtest_normalized_alpha.csv
