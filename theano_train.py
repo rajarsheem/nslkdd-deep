@@ -19,13 +19,13 @@ class_weight = []
 layer_stack, w_stack, b_stack, dw_stack, db_stack = [], [], [], [], []
 
 num_examples = 40
-nn_input_dim = 1000
+nn_input_dim = 200
 nn_output_dim = 5
 # three layers in a conical structure
-nn_hdims = [1000, 500, 100]
+nn_hdims = [500, 100]
 batch_per_epoch = 3000
 num_passes = 2
-n_layers = 3
+n_layers = 2
 
 epsilon = np.float32(0.06)
 reg_lambda = np.float32(0.0001)
@@ -74,14 +74,13 @@ c_w = theano.shared(np.array(np.random.randn(200), config.floatX))
 # params=[W1,b1,W2,b2,W3,b3]
 params = [w_stack, b_stack]
 
-add_layer('relu', nn_hdims[0])
-add_layer('relu', nn_hdims[1])
-add_layer('relu', nn_hdims[2])
+add_layer('sigmoid', nn_hdims[0])
+add_layer('sigmoid', nn_hdims[1])
 add_layer('softmax', nn_output_dim)
 
 loss_reg = 1. / num_examples * reg_lambda / 2 * (
     T.sum(T.sqr(w_stack[-3])) + T.sum(T.sqr(w_stack[-2])) + T.sum(T.sqr(w_stack[-1])))
-loss = ((T.nnet.categorical_crossentropy(layer_stack[-1], y) * c_w).mean()) + loss_reg
+loss = ((T.nnet.categorical_crossentropy(layer_stack[-1], y)).mean()) + loss_reg
 prediction = T.argmax(layer_stack[-1], axis=1)
 
 # dW4 = T.grad(loss, w_stack[-1])
@@ -119,13 +118,13 @@ gradient_step = theano.function(
 def build_model(num_passes=5, print_loss=False):
     np.random.seed(0)
 
-    w_stack[-4].set_value((np.random.randn(nn_input_dim, nn_hdims[0]) / np.sqrt(nn_input_dim)).astype('float32'))
-    b_stack[-4].set_value(np.zeros(nn_hdims[0]).astype('float32'))
-    w_stack[-3].set_value((np.random.randn(nn_hdims[0], nn_hdims[1]) / np.sqrt(nn_hdims[0])).astype('float32'))
-    b_stack[-3].set_value(np.zeros(nn_hdims[1]).astype('float32'))
-    w_stack[-2].set_value((np.random.randn(nn_hdims[1], nn_hdims[2]) / np.sqrt(nn_hdims[1])).astype('float32'))
-    b_stack[-2].set_value(np.zeros(nn_hdims[2]).astype('float32'))
-    w_stack[-1].set_value((np.random.randn(nn_hdims[2], nn_output_dim) / np.sqrt(nn_hdims[1])).astype('float32'))
+    w_stack[-3].set_value((np.random.randn(nn_input_dim, nn_hdims[0]) / np.sqrt(nn_input_dim)).astype('float32'))
+    b_stack[-3].set_value(np.zeros(nn_hdims[0]).astype('float32'))
+    w_stack[-2].set_value((np.random.randn(nn_hdims[0], nn_hdims[1]) / np.sqrt(nn_hdims[0])).astype('float32'))
+    b_stack[-2].set_value(np.zeros(nn_hdims[1]).astype('float32'))
+    # w_stack[-1].set_value((np.random.randn(nn_hdims[1], nn_hdims[2]) / np.sqrt(nn_hdims[1])).astype('float32'))
+    # b_stack[-1].set_value(np.zeros(nn_hdims[2]).astype('float32'))
+    w_stack[-1].set_value((np.random.randn(nn_hdims[1], nn_output_dim) / np.sqrt(nn_hdims[1])).astype('float32'))
     b_stack[-1].set_value(np.zeros(nn_output_dim).astype('float32'))
 
     for i in range(0, num_passes):

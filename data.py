@@ -14,19 +14,12 @@ def one_hot(yy):
 
 def compute_class_weight(y):
     y = y.astype(np.int32)
-    print(np.bincount(y))
     w = ((len(y) / (5*np.bincount(y))) + 1)
-    print(w)
     w = MinMaxScaler(feature_range=(1, 2)).fit_transform(w.reshape(-1,1)).flatten()
-    print(w)
     #w = np.array([1,1,1,1,1],dtype=np.float32)
     r = np.array([w[i] for i in y])
-    # print(np.bincount(y))
-    # w = (len(y) / np.bincount(y))) + 1)
-    # print(w)
-    # w = MinMaxScaler(feature_range=(1, 2)).fit_transform(w.reshape(-1,1)).flatten()
-    # print(w)
-    w = np.array([1,1,1.1,1.2,1.5],dtype=np.float32)
+    # w = np.array([1,1,1.1,1.2,1.5],dtype=np.float32)
+    w = np.array([1,1,1,1,1],dtype=np.float32)
     r = np.array([w[i] for i in y]) + 1
     return r
 
